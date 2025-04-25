@@ -18,12 +18,23 @@ const { checkAuth, checkRole } = require('./middleware/auth');
 const app = express();
 
 // Configuration de la session
-app.use(session({
+const sessionConfig = {
     secret: process.env.SESSION_SECRET || 'un_secret_temporaire',
     resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false }
-}));
+    saveUninitialized: false,
+    cookie: { 
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 24 * 60 * 60 * 1000 // 24 heures
+    }
+};
+
+// En production, utilisez un cookie secure si HTTPS
+if (app.get('env') === 'production') {
+    app.set('trust proxy', 1);
+    sessionConfig.cookie.secure = true;
+}
+
+app.use(session(sessionConfig));
 
 console.log('Configuration de la session terminée');
 
