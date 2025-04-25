@@ -3,6 +3,7 @@ const router = express.Router();
 const Livre = require('../models/livreModel');
 const Emprunt = require('../models/empruntModel');
 const User = require('../models/userModel');
+const bcrypt = require('bcryptjs');
 
 // Dashboard Admin
 router.get('/dashboard', async (req, res) => {
@@ -201,6 +202,51 @@ router.delete('/livres/:id', async (req, res) => {
         console.error(error);
         res.status(500).render('error', {
             message: 'Une erreur est survenue lors de la suppression du livre',
+            session: req.session
+        });
+    }
+});
+
+// Formulaire d'ajout d'étudiant
+router.get('/etudiants/add', (req, res) => {
+    res.render('admin/add-etudiant', {
+        session: req.session,
+        error: null
+    });
+});
+
+// Ajouter un étudiant
+router.post('/etudiants', async (req, res) => {
+    try {
+        const { nom, email, password, classe } = req.body;
+
+        // Vérifier si l'email existe déjà
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.render('admin/add-etudiant', {
+                error: 'Cet email est déjà utilisé',
+                session: req.session
+            });
+        }
+
+        // Hasher le mot de passe
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Créer un nouvel étudiant
+        const newEtudiant = new User({
+            nom,
+            email,
+            password: hashedPassword,
+            classe,
+            role: 'etudiant'
+        });
+
+        await newEtudiant.save();
+        res.redirect('/admin/etudiants');
+    } catch (error) {
+        console.error('Erreur ajout étudiant:', error);
+        res.render('admin/add-etudiant', {
+            error: 'Une erreur est survenue lors de l\'ajout de l\'étudiant',
             session: req.session
         });
     }
