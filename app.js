@@ -9,6 +9,9 @@ const connectDB = require('./models/db');
 
 console.log('Démarrage de l\'application...');
 
+const uri = process.env.MONGO_URI;
+mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+
 // Middleware d'authentification
 const { checkAuth, checkRole } = require('./middleware/auth');
 
