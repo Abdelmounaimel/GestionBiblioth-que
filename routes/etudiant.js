@@ -17,12 +17,14 @@ router.get('/dashboard', async (req, res) => {
 
         res.render('etudiant/dashboard', {
             empruntsEnCours,
-            livresDisponibles
+            livresDisponibles,
+            session: req.session
         });
     } catch (error) {
         console.error(error);
         res.status(500).render('error', {
-            message: 'Une erreur est survenue lors du chargement du tableau de bord'
+            message: 'Une erreur est survenue lors du chargement du tableau de bord',
+            session: req.session
         });
     }
 });

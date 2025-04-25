@@ -27,6 +27,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cookieParser());
 app.use(methodOverride('_method'));
 
+// Middleware pour rendre la session disponible dans tous les templates
+app.use((req, res, next) => {
+    res.locals.session = req.session;
+    next();
+});
+
 // Configuration EJS
 app.set('view engine', 'ejs');
 app.use(ejsLayouts);
@@ -66,7 +72,8 @@ mongoose.connect('mongodb://127.0.0.1:27017/bibliotheque_db', {
 // Gestion des erreurs 404
 app.use((req, res) => {
     res.status(404).render('error', { 
-        message: 'Page non trouvée' 
+        message: 'Page non trouvée',
+        session: req.session
     });
 });
 
@@ -74,7 +81,8 @@ app.use((req, res) => {
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).render('error', { 
-        message: 'Une erreur est survenue' 
+        message: 'Une erreur est survenue',
+        session: req.session
     });
 });
 
