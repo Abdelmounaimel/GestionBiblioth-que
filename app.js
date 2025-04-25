@@ -75,6 +75,16 @@ app.use('/livres', require('./routes/livres'));
 // Routes protégées pour les emprunts
 app.use('/emprunts', checkAuth, require('./routes/emprunts'));
 
+// Middleware pour gérer les erreurs 404
+app.use((req, res) => {
+    console.log('404 - Route non trouvée:', req.url);
+    console.log('Session:', req.session);
+    res.status(404).render('error', { 
+        message: 'Page non trouvée',
+        session: req.session
+    });
+});
+
 console.log('Configuration des routes terminée');
 
 // Connexion MongoDB et démarrage du serveur

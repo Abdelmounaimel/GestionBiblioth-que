@@ -1,0 +1,47 @@
+<div class="container">
+    <h2 class="mb-4">Liste des Emprunts</h2>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Livre</th>
+                            <th>Étudiant</th>
+                            <th>Date d'emprunt</th>
+                            <th>Date de retour prévue</th>
+                            <th>Statut</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% emprunts.forEach(emprunt => { %>
+                            <tr>
+                                <td><%= emprunt.livre.titre %></td>
+                                <td><%= emprunt.etudiant.nom %></td>
+                                <td><%= new Date(emprunt.dateEmprunt).toLocaleDateString() %></td>
+                                <td><%= new Date(emprunt.dateRetourPrevue).toLocaleDateString() %></td>
+                                <td>
+                                    <span class="badge bg-<%= emprunt.statut === 'en_cours' ? 'success' : 'warning' %>">
+                                        <%= emprunt.statut %>
+                                    </span>
+                                </td>
+                                <td>
+                                    <% if (emprunt.statut === 'en_cours') { %>
+                                        <form action="/admin/emprunts/<%= emprunt._id %>/retour" method="POST" style="display: inline;">
+                                            <input type="hidden" name="_method" value="PUT">
+                                            <button type="submit" class="btn btn-success btn-sm">
+                                                Marquer comme retourné
+                                            </button>
+                                        </form>
+                                    <% } %>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

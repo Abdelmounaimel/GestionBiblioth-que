@@ -11,14 +11,65 @@ router.get('/dashboard', async (req, res) => {
         const empruntsCount = await Emprunt.countDocuments();
         const etudiantsCount = await User.countDocuments({ role: 'etudiant' });
         
+        // Récupérer les derniers emprunts
+        const derniersEmprunts = await Emprunt.find()
+            .populate('livre')
+            .populate('etudiant')
+            .sort({ dateEmprunt: -1 })
+            .limit(5);
+
+        // Récupérer les derniers livres
+        const derniersLivres = await Livre.find()
+            .sort({ _id: -1 })
+            .limit(5);
+
         res.render('admin/dashboard', { 
             livresCount, 
             empruntsCount, 
             etudiantsCount,
+            derniersEmprunts,
+            derniersLivres,
             session: req.session
         });
     } catch (error) {
-        console.error(error);
+        console.error('Erreur dashboard:', error);
+        res.status(500).render('error', {
+            message: 'Une erreur est survenue',
+            session: req.session
+        });
+    }
+});
+
+// Liste des étudiants
+router.get('/etudiants', async (req, res) => {
+    try {
+        const etudiants = await User.find({ role: 'etudiant' }).sort({ nom: 1 });
+        res.render('admin/etudiants', { 
+            etudiants,
+            session: req.session
+        });
+    } catch (error) {
+        console.error('Erreur liste étudiants:', error);
+        res.status(500).render('error', {
+            message: 'Une erreur est survenue',
+            session: req.session
+        });
+    }
+});
+
+// Liste des emprunts
+router.get('/emprunts', async (req, res) => {
+    try {
+        const emprunts = await Emprunt.find()
+            .populate('livre')
+            .populate('etudiant')
+            .sort({ dateEmprunt: -1 });
+        res.render('admin/emprunts', { 
+            emprunts,
+            session: req.session
+        });
+    } catch (error) {
+        console.error('Erreur liste emprunts:', error);
         res.status(500).render('error', {
             message: 'Une erreur est survenue',
             session: req.session

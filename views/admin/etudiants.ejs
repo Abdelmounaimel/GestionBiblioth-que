@@ -1,0 +1,34 @@
+<div class="container">
+    <h2 class="mb-4">Liste des Étudiants</h2>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Email</th>
+                            <th>Classe</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% etudiants.forEach(etudiant => { %>
+                            <tr>
+                                <td><%= etudiant.nom %></td>
+                                <td><%= etudiant.email %></td>
+                                <td><%= etudiant.classe %></td>
+                                <td>
+                                    <a href="/admin/etudiants/<%= etudiant._id %>/emprunts" class="btn btn-info btn-sm">
+                                        Voir les emprunts
+                                    </a>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div> 
