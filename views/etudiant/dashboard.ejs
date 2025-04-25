@@ -1,76 +1,99 @@
-<div class="row">
-    <div class="col-md-12">
-        <h2 class="mb-4">Tableau de bord Étudiant</h2>
-    </div>
-</div>
+<div class="container">
+    <h2 class="mb-4">Tableau de bord Étudiant</h2>
 
-<div class="row">
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">
-                <h5>Mes emprunts en cours</h5>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Titre</th>
-                                <th>Date d'emprunt</th>
-                                <th>Date de retour prévue</th>
-                                <th>Statut</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% empruntsEnCours.forEach(emprunt => { %>
-                                <tr>
-                                    <td><%= emprunt.livre.titre %></td>
-                                    <td><%= new Date(emprunt.dateEmprunt).toLocaleDateString() %></td>
-                                    <td><%= new Date(emprunt.dateRetourPrevu).toLocaleDateString() %></td>
-                                    <td>
-                                        <span class="badge bg-<%= emprunt.statut === 'en_cours' ? 'success' : 'warning' %>">
-                                            <%= emprunt.statut %>
-                                        </span>
-                                    </td>
-                                </tr>
-                            <% }); %>
-                        </tbody>
-                    </table>
+    <div class="row">
+        <!-- Emprunts en cours -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Mes emprunts en cours</h5>
+                </div>
+                <div class="card-body">
+                    <% if (empruntsEnCours.length === 0) { %>
+                        <p class="text-center">Aucun emprunt en cours</p>
+                    <% } else { %>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Titre</th>
+                                        <th>Date d'emprunt</th>
+                                        <th>Date de retour</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% empruntsEnCours.forEach(emprunt => { %>
+                                        <tr>
+                                            <td><%= emprunt.livre.titre %></td>
+                                            <td><%= new Date(emprunt.dateEmprunt).toLocaleDateString() %></td>
+                                            <td>
+                                                <%= new Date(emprunt.dateRetourPrevu).toLocaleDateString() %>
+                                                <% 
+                                                    const today = new Date();
+                                                    const retourPrevu = new Date(emprunt.dateRetourPrevu);
+                                                    if (today > retourPrevu) { 
+                                                %>
+                                                    <span class="badge bg-danger">En retard</span>
+                                                <% } %>
+                                            </td>
+                                            <td>
+                                                <form action="/etudiant/retourner/<%= emprunt._id %>" method="POST" style="display: inline;">
+                                                    <button type="submit" class="btn btn-success btn-sm">
+                                                        Retourner
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    <% }); %>
+                                </tbody>
+                            </table>
+                        </div>
+                    <% } %>
+                    <div class="mt-3">
+                        <a href="/etudiant/mes-emprunts" class="btn btn-primary btn-sm">Voir tous mes emprunts</a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">
-                <h5>Livres disponibles</h5>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Titre</th>
-                                <th>Auteur</th>
-                                <th>Catégorie</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% livresDisponibles.forEach(livre => { %>
-                                <tr>
-                                    <td><%= livre.titre %></td>
-                                    <td><%= livre.auteur %></td>
-                                    <td><%= livre.categorie %></td>
-                                    <td>
-                                        <a href="/livres/emprunter/<%= livre._id %>" class="btn btn-sm btn-primary">
-                                            Emprunter
-                                        </a>
-                                    </td>
-                                </tr>
-                            <% }); %>
-                        </tbody>
-                    </table>
+
+        <!-- Livres disponibles -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Livres disponibles</h5>
+                </div>
+                <div class="card-body">
+                    <% if (livresDisponibles.length === 0) { %>
+                        <p class="text-center">Aucun livre disponible</p>
+                    <% } else { %>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Titre</th>
+                                        <th>Auteur</th>
+                                        <th>Catégorie</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% livresDisponibles.forEach(livre => { %>
+                                        <tr>
+                                            <td><%= livre.titre %></td>
+                                            <td><%= livre.auteur %></td>
+                                            <td><%= livre.categorie %></td>
+                                            <td>
+                                                <a href="/etudiant/emprunter/<%= livre._id %>" class="btn btn-primary btn-sm">
+                                                    Emprunter
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    <% }); %>
+                                </tbody>
+                            </table>
+                        </div>
+                    <% } %>
                 </div>
             </div>
         </div>

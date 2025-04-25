@@ -4,8 +4,19 @@ const Livre = require('../models/livreModel');
 
 // Liste des livres
 router.get('/', async (req, res) => {
-    const livres = await Livre.find();
-    res.render('livres/index', { livres });
+    try {
+        const livres = await Livre.find();
+        res.render('livres/index', { 
+            livres,
+            session: req.session
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).render('error', {
+            message: 'Une erreur est survenue lors du chargement des livres',
+            session: req.session
+        });
+    }
 });
 
 module.exports = router;

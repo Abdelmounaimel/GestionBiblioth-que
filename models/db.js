@@ -1,15 +1,15 @@
 const mongoose = require('mongoose');
-require('dotenv').config();
 
 const connectDB = async () => {
+    const uri = 'mongodb://127.0.0.1:27017';
+    const dbName = 'bibliotheque_db';
+    
     try {
-        await mongoose.connect(process.env.MONGODB_URI, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true
-        });
-        console.log('Connected to MongoDB');
+        await mongoose.connect(`${uri}/${dbName}`);
+        console.log('Connecté à MongoDB avec succès');
     } catch (error) {
-        console.error('MongoDB connection error:', error);
+        console.error('Erreur de connexion MongoDB:', error);
+        console.error('Assurez-vous que MongoDB est en cours d\'exécution');
         process.exit(1);
     }
 };

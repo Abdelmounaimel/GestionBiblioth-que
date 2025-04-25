@@ -1,0 +1,41 @@
+<div class="container">
+    <h2 class="mb-4">Catalogue des Livres</h2>
+
+    <div class="row">
+        <% if (livres.length === 0) { %>
+            <div class="col-12">
+                <div class="alert alert-info">
+                    Aucun livre disponible pour le moment.
+                </div>
+            </div>
+        <% } else { %>
+            <% livres.forEach(livre => { %>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title"><%= livre.titre %></h5>
+                            <p class="card-text">
+                                <strong>Auteur:</strong> <%= livre.auteur %><br>
+                                <strong>Catégorie:</strong> <%= livre.categorie %><br>
+                                <% if (livre.description) { %>
+                                    <strong>Description:</strong> <%= livre.description %><br>
+                                <% } %>
+                                <strong>Statut:</strong>
+                                <% if (livre.disponible) { %>
+                                    <span class="badge bg-success">Disponible</span>
+                                <% } else { %>
+                                    <span class="badge bg-danger">Indisponible</span>
+                                <% } %>
+                            </p>
+                            <% if (session && session.userId && session.role === 'etudiant' && livre.disponible) { %>
+                                <a href="/etudiant/emprunter/<%= livre._id %>" class="btn btn-primary">
+                                    Emprunter
+                                </a>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+            <% }); %>
+        <% } %>
+    </div>
+</div> 

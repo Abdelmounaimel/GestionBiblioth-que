@@ -1,0 +1,30 @@
+<div class="container">
+    <h2 class="mb-4">Emprunter un livre</h2>
+
+    <div class="card">
+        <div class="card-body">
+            <h3 class="card-title"><%= livre.titre %></h3>
+            <p class="card-text">
+                <strong>Auteur:</strong> <%= livre.auteur %><br>
+                <strong>Catégorie:</strong> <%= livre.categorie %><br>
+                <% if (livre.description) { %>
+                    <strong>Description:</strong> <%= livre.description %><br>
+                <% } %>
+            </p>
+
+            <div class="alert alert-info">
+                <p class="mb-0">
+                    <strong>Note:</strong> La durée d'emprunt est de 14 jours.
+                    Vous ne pouvez pas avoir plus de 3 emprunts simultanés.
+                </p>
+            </div>
+
+            <form action="/etudiant/emprunter/<%= livre._id %>" method="POST">
+                <button type="submit" class="btn btn-primary">
+                    Confirmer l'emprunt
+                </button>
+                <a href="/etudiant/dashboard" class="btn btn-secondary">Annuler</a>
+            </form>
+        </div>
+    </div>
+</div> 

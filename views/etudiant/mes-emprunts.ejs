@@ -1,0 +1,58 @@
+<div class="container">
+    <h2 class="mb-4">Mes Emprunts</h2>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Livre</th>
+                            <th>Date d'emprunt</th>
+                            <th>Date de retour prévue</th>
+                            <th>Statut</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (emprunts.length === 0) { %>
+                            <tr>
+                                <td colspan="5" class="text-center">Aucun emprunt trouvé</td>
+                            </tr>
+                        <% } else { %>
+                            <% emprunts.forEach(emprunt => { %>
+                                <tr>
+                                    <td><%= emprunt.livre.titre %></td>
+                                    <td><%= new Date(emprunt.dateEmprunt).toLocaleDateString() %></td>
+                                    <td><%= new Date(emprunt.dateRetourPrevu).toLocaleDateString() %></td>
+                                    <td>
+                                        <% if (emprunt.statut === 'en_cours') { %>
+                                            <span class="badge bg-primary">En cours</span>
+                                        <% } else if (emprunt.statut === 'en_retard') { %>
+                                            <span class="badge bg-danger">En retard</span>
+                                        <% } else if (emprunt.statut === 'retourne') { %>
+                                            <span class="badge bg-success">Retourné</span>
+                                        <% } %>
+                                    </td>
+                                    <td>
+                                        <% if (emprunt.statut === 'en_cours' || emprunt.statut === 'en_retard') { %>
+                                            <form action="/etudiant/retourner/<%= emprunt._id %>" method="POST" style="display: inline;">
+                                                <button type="submit" class="btn btn-success btn-sm">
+                                                    Retourner
+                                                </button>
+                                            </form>
+                                        <% } %>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <a href="/etudiant/dashboard" class="btn btn-primary">Retour au tableau de bord</a>
+    </div>
+</div> 
