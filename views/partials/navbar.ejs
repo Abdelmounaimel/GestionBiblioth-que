@@ -1,0 +1,35 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">Bibliothèque</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <% if (role === 'admin') { %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/dashboard">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/livres">Livres</a>
+                    </li>
+                <% } else if (role === 'etudiant') { %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/etudiant/dashboard">Mon Espace</a>
+                    </li>
+                <% } %>
+            </ul>
+            <ul class="navbar-nav">
+                <% if (userId) { %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Déconnexion</a>
+                    </li>
+                <% } else { %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">Connexion</a>
+                    </li>
+                <% } %>
+            </ul>
+        </div>
+    </div>
+</nav>

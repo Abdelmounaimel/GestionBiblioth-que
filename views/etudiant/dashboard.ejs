@@ -1,0 +1,78 @@
+<div class="row">
+    <div class="col-md-12">
+        <h2 class="mb-4">Tableau de bord Étudiant</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Mes emprunts en cours</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Titre</th>
+                                <th>Date d'emprunt</th>
+                                <th>Date de retour prévue</th>
+                                <th>Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% empruntsEnCours.forEach(emprunt => { %>
+                                <tr>
+                                    <td><%= emprunt.livre.titre %></td>
+                                    <td><%= new Date(emprunt.dateEmprunt).toLocaleDateString() %></td>
+                                    <td><%= new Date(emprunt.dateRetourPrevu).toLocaleDateString() %></td>
+                                    <td>
+                                        <span class="badge bg-<%= emprunt.statut === 'en_cours' ? 'success' : 'warning' %>">
+                                            <%= emprunt.statut %>
+                                        </span>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Livres disponibles</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Titre</th>
+                                <th>Auteur</th>
+                                <th>Catégorie</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% livresDisponibles.forEach(livre => { %>
+                                <tr>
+                                    <td><%= livre.titre %></td>
+                                    <td><%= livre.auteur %></td>
+                                    <td><%= livre.categorie %></td>
+                                    <td>
+                                        <a href="/livres/emprunter/<%= livre._id %>" class="btn btn-sm btn-primary">
+                                            Emprunter
+                                        </a>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
