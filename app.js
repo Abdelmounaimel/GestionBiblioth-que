@@ -6,10 +6,7 @@ const ejsLayouts = require('express-ejs-layouts');
 const methodOverride = require('method-override');
 const cookieParser = require('cookie-parser');
 const connectDB = require('./models/db');
-const port = process.env.PORT || 8080;
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
-});
+
 console.log('Démarrage de l\'application...');
 
 const uri = process.env.MONGO_URI;
