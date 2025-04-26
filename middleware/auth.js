@@ -11,33 +11,22 @@ const checkAuth = (req, res, next) => {
 
 // Middleware pour vérifier si l'utilisateur a le bon rôle
 const checkRole = (role) => {
-    return (req, res, next) => {
-        if (req.session.role !== role) {
-            return res.status(403).render('error', { 
-                message: 'Accès non autorisé' 
+    return async (req, res, next) => {
+        try {
+            const user = await User.findById(req.session.userId);
+            if (!user || user.role !== role) {
+                return res.status(403).render('error', { 
+                    message: 'Accès non autorisé' 
+                });
+            }
+            next();
+        } catch (error) {
+            console.error('Erreur de vérification du rôle:', error);
+            res.status(500).render('error', { 
+                message: 'Une erreur est survenue lors de la vérification des autorisations' 
             });
         }
-        next();
     };
 };
 
 module.exports = { checkAuth, checkRole };
-
-module.exports = {
-    checkAuth: (req, res, next) => {
-        if (!req.session.userId) {
-            return res.redirect('/login');
-        }
-        next();
-    },
-
-    checkRole: (role) => {
-        return async (req, res, next) => {
-            const user = await User.findById(req.session.userId);
-            if (!user || user.role !== role) {
-                return res.status(403).send('Accès interdit');
-            }
-            next();
-        };
-    }
-};

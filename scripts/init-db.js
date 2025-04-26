@@ -16,8 +16,9 @@ mongoose.connect('mongodb://127.0.0.1:27017/bibliotheque_db', {
         
         if (!adminExists) {
             // Créer l'administrateur
-            const hashedPassword = await bcrypt.hash('admin123', 10);
+            const hashedPassword = await bcrypt.hash('admin', 10);
             const admin = new User({
+                username: 'admin',
                 nom: 'Administrateur',
                 email: 'admin@biblio.com',
                 password: hashedPassword,
@@ -27,8 +28,8 @@ mongoose.connect('mongodb://127.0.0.1:27017/bibliotheque_db', {
             
             await admin.save();
             console.log('Compte administrateur créé avec succès');
-            console.log('Email: admin@biblio.com');
-            console.log('Mot de passe: admin123');
+            console.log('Username: admin');
+            console.log('Mot de passe: admin');
         } else {
             console.log('Le compte administrateur existe déjà');
         }

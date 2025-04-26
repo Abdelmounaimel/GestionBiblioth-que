@@ -1,0 +1,42 @@
+<%- include('../partials/header') %>
+
+<div class="container mt-4">
+    <h1 class="mb-4">Mes Emprunts</h1>
+
+    <div class="card">
+        <div class="card-body">
+            <% if (emprunts && emprunts.length > 0) { %>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Livre</th>
+                                <th>Date d'emprunt</th>
+                                <th>Date de retour prévue</th>
+                                <th>Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% emprunts.forEach(emprunt => { %>
+                                <tr>
+                                    <td><%= emprunt.livre.titre %></td>
+                                    <td><%= new Date(emprunt.dateEmprunt).toLocaleDateString() %></td>
+                                    <td><%= new Date(emprunt.dateRetourPrevu).toLocaleDateString() %></td>
+                                    <td>
+                                        <span class="badge <%= emprunt.statut === 'en_retard' ? 'bg-danger' : 'bg-primary' %>">
+                                            <%= emprunt.statut === 'en_retard' ? 'En retard' : 'En cours' %>
+                                        </span>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+            <% } else { %>
+                <p class="text-center mb-0">Vous n'avez aucun emprunt.</p>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

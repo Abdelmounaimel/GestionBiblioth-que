@@ -1,0 +1,51 @@
+<%- include('../partials/header') %>
+
+<div class="container mt-4">
+    <h1 class="mb-4">Catalogue des Livres</h1>
+
+    <div class="card">
+        <div class="card-body">
+            <% if (livres && livres.length > 0) { %>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Titre</th>
+                                <th>Auteur</th>
+                                <th>Catégorie</th>
+                                <th>Disponibilité</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% livres.forEach(livre => { %>
+                                <tr>
+                                    <td><%= livre.titre %></td>
+                                    <td><%= livre.auteur %></td>
+                                    <td><%= livre.categorie %></td>
+                                    <td>
+                                        <span class="badge <%= livre.disponible ? 'bg-success' : 'bg-danger' %>">
+                                            <%= livre.disponible ? 'Disponible' : 'Indisponible' %>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <a href="/livres/<%= livre._id %>" class="btn btn-sm btn-info">Détails</a>
+                                        <% if (livre.disponible) { %>
+                                            <form action="/etudiant/emprunter/<%= livre._id %>" method="POST" class="d-inline">
+                                                <button type="submit" class="btn btn-sm btn-success">Emprunter</button>
+                                            </form>
+                                        <% } %>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+            <% } else { %>
+                <p class="text-center mb-0">Aucun livre disponible pour le moment.</p>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %> 

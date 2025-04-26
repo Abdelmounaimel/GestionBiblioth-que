@@ -11,19 +11,26 @@ router.get('/login', (req, res) => {
 // Traitement de la connexion
 router.post('/login', async (req, res) => {
     try {
-        const { email, password } = req.body;
-        const user = await User.findOne({ email });
+        const { username, password } = req.body;
+        
+        // Recherche de l'utilisateur par username
+        const user = await User.findOne({ 
+            $or: [
+                { username: username },
+                { email: username }
+            ]
+        });
 
         if (!user) {
             return res.render('auth/login', { 
-                error: 'Email ou mot de passe incorrect' 
+                error: 'Nom d\'utilisateur ou mot de passe incorrect' 
             });
         }
 
         const validPassword = await bcrypt.compare(password, user.password);
         if (!validPassword) {
             return res.render('auth/login', { 
-                error: 'Email ou mot de passe incorrect' 
+                error: 'Nom d\'utilisateur ou mot de passe incorrect' 
             });
         }
 

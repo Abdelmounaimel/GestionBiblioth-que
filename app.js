@@ -32,6 +32,12 @@ app.set('view engine', 'ejs');
 app.use(ejsLayouts);
 app.set('layout', 'layouts/layout');
 
+// Middleware pour rendre la session disponible dans toutes les vues
+app.use((req, res, next) => {
+    res.locals.session = req.session;
+    next();
+});
+
 // Routes
 app.get('/', (req, res) => {
     res.redirect('/login');
@@ -78,7 +84,22 @@ app.use((err, req, res, next) => {
     });
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
+
 app.listen(PORT, () => {
     console.log(`Serveur démarré sur le port ${PORT}`);
+}).on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+        console.log(`Le port ${PORT} est déjà utilisé. Tentative avec le port ${PORT + 1}...`);
+        const newPort = PORT + 1;
+        app.listen(newPort, () => {
+            console.log(`Serveur démarré sur le port ${newPort}`);
+        }).on('error', (err) => {
+            console.error('Erreur du serveur:', err);
+            process.exit(1);
+        });
+    } else {
+        console.error('Erreur du serveur:', err);
+        process.exit(1);
+    }
 });

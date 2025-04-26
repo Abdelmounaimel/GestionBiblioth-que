@@ -1,0 +1,54 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Gestion des Livres</h2>
+            <a href="/admin/livres/add" class="btn btn-primary">Ajouter un livre</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Titre</th>
+                                <th>Auteur</th>
+                                <th>Catégorie</th>
+                                <th>Exemplaires</th>
+                                <th>Disponibilité</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (livres && livres.length > 0) { %>
+                                <% livres.forEach(livre => { %>
+                                    <tr>
+                                        <td><%= livre.titre %></td>
+                                        <td><%= livre.auteur %></td>
+                                        <td><%= livre.categorie %></td>
+                                        <td><%= livre.nombreExemplaires %></td>
+                                        <td>
+                                            <span class="badge bg-<%= livre.disponible ? 'success' : 'danger' %>">
+                                                <%= livre.disponible ? 'Disponible' : 'Non disponible' %>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <a href="/admin/livres/edit/<%= livre._id %>" class="btn btn-sm btn-warning">Modifier</a>
+                                            <form action="/admin/livres/<%= livre._id %>?_method=DELETE" method="POST" class="d-inline">
+                                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce livre ?')">Supprimer</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+                            <% } else { %>
+                                <tr>
+                                    <td colspan="6" class="text-center">Aucun livre trouvé</td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

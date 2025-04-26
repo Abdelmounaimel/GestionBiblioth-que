@@ -1,0 +1,50 @@
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-header">
+                <h3>Ajouter un nouveau livre</h3>
+            </div>
+            <div class="card-body">
+                <form action="/admin/livres" method="POST">
+                    <div class="mb-3">
+                        <label for="titre" class="form-label">Titre</label>
+                        <input type="text" class="form-control" id="titre" name="titre" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="auteur" class="form-label">Auteur</label>
+                        <input type="text" class="form-control" id="auteur" name="auteur" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="categorie" class="form-label">Catégorie</label>
+                        <select class="form-select" id="categorie" name="categorie" required>
+                            <option value="">Sélectionner une catégorie</option>
+                            <option value="Roman">Roman</option>
+                            <option value="Science">Science</option>
+                            <option value="Histoire">Histoire</option>
+                            <option value="Informatique">Informatique</option>
+                            <option value="Mathématiques">Mathématiques</option>
+                            <option value="Autre">Autre</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="nombreExemplaires" class="form-label">Nombre d'exemplaires</label>
+                        <input type="number" class="form-control" id="nombreExemplaires" name="nombreExemplaires" min="1" value="1" required>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">Ajouter le livre</button>
+                        <a href="/admin/livres" class="btn btn-secondary">Annuler</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

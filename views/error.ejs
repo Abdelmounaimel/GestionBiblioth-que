@@ -1,12 +1,17 @@
-<div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header bg-danger text-white">
-                <h3 class="text-center">Erreur</h3>
-            </div>
-            <div class="card-body text-center">
-                <h4 class="mb-4"><%= message %></h4>
-                <a href="/" class="btn btn-primary">Retour à l'accueil</a>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card mt-5">
+                <div class="card-header bg-danger text-white">
+                    <h3 class="text-center mb-0">Erreur</h3>
+                </div>
+                <div class="card-body">
+                    <p class="text-center mb-4"><%= message %></p>
+                    <div class="text-center">
+                        <a href="javascript:history.back()" class="btn btn-primary">Retour</a>
+                        <a href="/" class="btn btn-secondary">Accueil</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
