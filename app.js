@@ -5,15 +5,10 @@ const path = require('path');
 const ejsLayouts = require('express-ejs-layouts');
 const methodOverride = require('method-override');
 const cookieParser = require('cookie-parser');
+const mongoose = require('mongoose'); // Ajout de l'import manquant
 const connectDB = require('./models/db');
 
 console.log('Démarrage de l\'application...');
-
-const uri = process.env.MONGO_URI;
-mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-
-// Middleware d'authentification
-const { checkAuth, checkRole } = require('./middleware/auth');
 
 const app = express();
 
@@ -35,7 +30,6 @@ if (app.get('env') === 'production') {
 }
 
 app.use(session(sessionConfig));
-
 console.log('Configuration de la session terminée');
 
 // Middlewares
@@ -50,7 +44,6 @@ app.use((req, res, next) => {
     res.locals.session = req.session;
     next();
 });
-
 console.log('Configuration des middlewares terminée');
 
 // Configuration EJS
@@ -58,7 +51,6 @@ app.set('view engine', 'ejs');
 app.use(ejsLayouts);
 app.set('layout', 'layouts/layout');
 app.set('views', path.join(__dirname, 'views'));
-
 console.log('Configuration EJS terminée');
 
 // Routes
@@ -78,26 +70,16 @@ app.get('/', (req, res) => {
 app.use('/', require('./routes/auth'));
 
 // Routes protégées pour l'admin
-app.use('/admin', checkAuth, checkRole('admin'), require('./routes/admin'));
+app.use('/admin', require('./middleware/auth').checkAuth, require('./middleware/auth').checkRole('admin'), require('./routes/admin'));
 
 // Routes protégées pour l'étudiant
-app.use('/etudiant', checkAuth, checkRole('etudiant'), require('./routes/etudiant'));
+app.use('/etudiant', require('./middleware/auth').checkAuth, require('./middleware/auth').checkRole('etudiant'), require('./routes/etudiant'));
 
 // Routes publiques pour les livres
 app.use('/livres', require('./routes/livres'));
 
 // Routes protégées pour les emprunts
-app.use('/emprunts', checkAuth, require('./routes/emprunts'));
-
-// Middleware pour gérer les erreurs 404
-app.use((req, res) => {
-    console.log('404 - Route non trouvée:', req.url);
-    console.log('Session:', req.session);
-    res.status(404).render('error', { 
-        message: 'Page non trouvée',
-        session: req.session
-    });
-});
+app.use('/emprunts', require('./middleware/auth').checkAuth, require('./routes/emprunts'));
 
 console.log('Configuration des routes terminée');
 
@@ -107,6 +89,7 @@ connectDB()
     .then(() => {
         // Gestion des erreurs 404
         app.use((req, res) => {
+            console.log('404 - Route non trouvée:', req.url);
             res.status(404).render('error', { 
                 message: 'Page non trouvée',
                 session: req.session
@@ -122,12 +105,17 @@ connectDB()
             });
         });
 
-        const PORT = process.env.PORT || 3000;
+        const PORT = process.env.PORT || 8080; // Changé à 8080 comme port par défaut pour Azure
         app.listen(PORT, () => {
             console.log(`Serveur démarré sur le port ${PORT}`);
         });
     })
     .catch(err => {
         console.error('Erreur de connexion à MongoDB:', err);
-        process.exit(1);
+        // Ne pas quitter le processus en production
+        if (process.env.NODE_ENV === 'production') {
+            console.error('Application continuée malgré l\'erreur de connexion à MongoDB');
+        } else {
+            process.exit(1);
+        }
     });
