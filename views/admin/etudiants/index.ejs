@@ -19,7 +19,6 @@
                                 <th>Prénom</th>
                                 <th>Email</th>
                                 <th>Nom d'utilisateur</th>
-                                <th>Classe</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -30,7 +29,6 @@
                                     <td><%= etudiant.prenom %></td>
                                     <td><%= etudiant.email %></td>
                                     <td><%= etudiant.username %></td>
-                                    <td><%= etudiant.classe %></td>
                                     <td>
                                         <form action="/admin/etudiants/<%= etudiant._id %>?_method=DELETE" method="POST" class="d-inline">
                                             <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet étudiant ?')">

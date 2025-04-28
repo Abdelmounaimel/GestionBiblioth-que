@@ -53,10 +53,10 @@ router.get('/dashboard', async (req, res) => {
         } catch (error) {
             console.error('Erreur récupération livres:', error);
         }
-
-        res.render('admin/dashboard', {
-            livresCount,
-            empruntsCount,
+    
+    res.render('admin/dashboard', { 
+        livresCount, 
+        empruntsCount, 
             etudiantsCount,
             derniersEmprunts,
             derniersLivres
@@ -72,8 +72,8 @@ router.get('/dashboard', async (req, res) => {
 // Gestion des livres
 router.get('/livres', async (req, res) => {
     try {
-        const livres = await Livre.find();
-        res.render('admin/livres', { livres });
+    const livres = await Livre.find();
+    res.render('admin/livres', { livres });
     } catch (error) {
         console.error('Erreur liste des livres:', error);
         res.render('error', {
@@ -139,14 +139,6 @@ router.post('/etudiants', async (req, res) => {
             });
         }
 
-        // Vérifier que tous les champs requis sont présents
-        if (!nom || !prenom || !email || !username || !password || !classe) {
-            return res.render('admin/etudiants/nouveau', {
-                error: 'Tous les champs sont obligatoires',
-                formData: req.body
-            });
-        }
-
         // Hasher le mot de passe
         const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -166,7 +158,7 @@ router.post('/etudiants', async (req, res) => {
     } catch (error) {
         console.error('Erreur création étudiant:', error);
         res.render('admin/etudiants/nouveau', {
-            error: 'Une erreur est survenue lors de la création de l\'étudiant: ' + error.message,
+            error: 'Une erreur est survenue lors de la création de l\'étudiant',
             formData: req.body
         });
     }

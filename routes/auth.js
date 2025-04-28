@@ -58,13 +58,43 @@ router.get('/register', (req, res) => {
 // Traitement de l'inscription
 router.post('/register', async (req, res) => {
     try {
-        const { nom, email, password, classe } = req.body;
-        
+        const { nom, prenom, username, email, classe, password, confirmPassword } = req.body;
+
+        // Vérifier si les mots de passe correspondent
+        if (password !== confirmPassword) {
+            return res.render('auth/register', { 
+                error: 'Les mots de passe ne correspondent pas',
+                nom,
+                prenom,
+                username,
+                email,
+                classe
+            });
+        }
+
         // Vérifier si l'email existe déjà
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.render('auth/register', { 
-                error: 'Cet email est déjà utilisé' 
+                error: 'Cet email est déjà utilisé',
+                nom,
+                prenom,
+                username,
+                email,
+                classe
+            });
+        }
+
+        // Vérifier si le nom d'utilisateur existe déjà
+        const existingUsername = await User.findOne({ username });
+        if (existingUsername) {
+            return res.render('auth/register', { 
+                error: 'Ce nom d\'utilisateur est déjà utilisé',
+                nom,
+                prenom,
+                username,
+                email,
+                classe
             });
         }
 
@@ -72,20 +102,27 @@ router.post('/register', async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // Créer un nouvel utilisateur
-        const user = new User({
+        const newUser = new User({
             nom,
+            prenom,
+            username,
             email,
-            password: hashedPassword,
             classe,
+            password: hashedPassword,
             role: 'etudiant'
         });
 
-        await user.save();
+        await newUser.save();
         res.redirect('/login');
     } catch (error) {
-        console.error(error);
+        console.error('Erreur lors de l\'inscription:', error);
         res.render('auth/register', { 
-            error: 'Une erreur est survenue lors de l\'inscription' 
+            error: 'Une erreur est survenue lors de l\'inscription',
+            nom: req.body.nom,
+            prenom: req.body.prenom,
+            username: req.body.username,
+            email: req.body.email,
+            classe: req.body.classe
         });
     }
 });

@@ -34,21 +34,15 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="username" class="form-label">Nom d'utilisateur</label>
-                            <input type="text" class="form-control" id="username" name="username" required
-                                value="<%= typeof formData !== 'undefined' ? formData.username : '' %>">
+                            <label for="classe" class="form-label">Classe</label>
+                            <input type="text" class="form-control" id="classe" name="classe" required
+                                value="<%= typeof formData !== 'undefined' ? formData.classe : '' %>">
                         </div>
 
                         <div class="mb-3">
-                            <label for="classe" class="form-label">Classe</label>
-                            <select class="form-select" id="classe" name="classe" required>
-                                <option value="">Sélectionnez une classe</option>
-                                <option value="L1" <%= typeof formData !== 'undefined' && formData.classe === 'L1' ? 'selected' : '' %>>Licence 1</option>
-                                <option value="L2" <%= typeof formData !== 'undefined' && formData.classe === 'L2' ? 'selected' : '' %>>Licence 2</option>
-                                <option value="L3" <%= typeof formData !== 'undefined' && formData.classe === 'L3' ? 'selected' : '' %>>Licence 3</option>
-                                <option value="M1" <%= typeof formData !== 'undefined' && formData.classe === 'M1' ? 'selected' : '' %>>Master 1</option>
-                                <option value="M2" <%= typeof formData !== 'undefined' && formData.classe === 'M2' ? 'selected' : '' %>>Master 2</option>
-                            </select>
+                            <label for="username" class="form-label">Nom d'utilisateur</label>
+                            <input type="text" class="form-control" id="username" name="username" required
+                                value="<%= typeof formData !== 'undefined' ? formData.username : '' %>">
                         </div>
 
                         <div class="mb-3">
